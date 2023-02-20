@@ -22,6 +22,9 @@ public class GameController : MonoBehaviour {
     public GameObject gameWinScreen;
     public GameObject gameOverScreen;
 
+    [Header("Audio")]
+    public bool alarmPlaying = false;
+
     //Start is called before the first frame update
     void Start() {
         itemManagerRef.GetAllPickUps();
@@ -57,6 +60,13 @@ public class GameController : MonoBehaviour {
             //Update time
             GameTimer.UpdateTime();
             timerRef.text = GameTimer.TimeLeftString();
+
+            //Check if time is < 1min
+            if ((GameTimer.GetTimeLeft() < 60.0f) && !alarmPlaying) {
+                //start alarms
+                alarmPlaying = true;
+                AudioManager.instance.Play("alarmSound");
+            }
 
             //Check for win
             if (winControllerRef.CheckForWin()) {
@@ -143,6 +153,9 @@ public class GameController : MonoBehaviour {
     public void UnpauseGame() {
         ChangeGameState(GameState.GAME);
         AudioManager.instance.Play("gameBackground");
+        if (alarmPlaying) {
+            AudioManager.instance.Play("alarmSound");
+        }
         itemManagerRef.UnpauseAll();
     }
 
