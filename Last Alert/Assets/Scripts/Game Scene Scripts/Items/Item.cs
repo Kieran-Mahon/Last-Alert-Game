@@ -25,6 +25,13 @@ public class Item : MonoBehaviour {
         UpdateStartData();
     }
 
+    void OnCollisionEnter(Collision collision) {
+        if (collision.relativeVelocity.magnitude > 2) {
+            AudioManager.instance.Play("objectCollision");
+        }
+    }
+
+
     public void ResetItem() {
         //Remove item from pick up controller if the player is held onto it
         if (pickUpRef != null) {
