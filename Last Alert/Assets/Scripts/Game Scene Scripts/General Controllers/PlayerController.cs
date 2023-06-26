@@ -36,9 +36,11 @@ public class PlayerController : MonoBehaviour {
     public float dampen = 0.05f;
     public float maxSpeed = 10.0f;
     public float velocity = 0.0f;
-
+    
     public GameObject fireExtinguisher;
     public ParticleSystem particles;
+
+    public Transform direction;
     
     [Header("Saving")]
     public bool loadPlayer = true;
@@ -98,8 +100,11 @@ public class PlayerController : MonoBehaviour {
             //calculate speed
             this.velocity = CalculateVelocity(this.velocity, this.spaceSpeed, this.dampen, this.maxSpeed);
 
+            //get direction
+            this.direction.localEulerAngles = new Vector3(cameraRef.transform.rotation.x, transformRef.rotation.y, 0);
+
             //move player
-            moveVector = transformRef.TransformDirection(new Vector3(0, 0, -this.velocity));
+            moveVector = direction.TransformDirection(new Vector3(0, 0, -this.velocity));
             controllerRef.Move(moveVector * Time.deltaTime);
 
         } else {
